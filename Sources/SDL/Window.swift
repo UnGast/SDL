@@ -26,7 +26,7 @@ public final class SDLWindow {
                 options: BitMaskOptionSet<SDLWindow.Option> = []) throws {
         
         let internalPointer = SDL_CreateWindow(title, frame.x.rawValue, frame.y.rawValue, Int32(frame.width), Int32(frame.height), options.rawValue)
-        
+
         self.internalPointer = try internalPointer.sdlThrow(type: type(of: self))
     }
     
@@ -109,6 +109,11 @@ public final class SDLWindow {
             
             return SDL_SetWindowDisplayMode(internalPointer, nil) >= 0
         }
+    }
+
+    // update a window that is in openGL mode
+    public func glSwap() {
+        SDL_GL_SwapWindow(internalPointer)
     }
     
     /// Set the title of a window

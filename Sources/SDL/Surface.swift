@@ -41,7 +41,7 @@ public final class SDLSurface {
         let internalPointer = SDL_GetWindowSurface(window.internalPointer)
         self.internalPointer = try internalPointer.sdlThrow(type: type(of: self))
     }
-    
+
     // MARK: - Accessors
     
     public var width: Int {
