@@ -132,16 +132,30 @@ public final class SDLRenderer {
     }
     
     /// Fill a rectangle on the current rendering target with the drawing color.
-    public func fill(rect: SDL_Rect? = nil) throws {
-        
-        let rectPointer: UnsafePointer<SDL_Rect>?
-        if let rect = rect {
-            rectPointer = withUnsafePointer(to: rect) { $0 }
-        } else {
-            rectPointer = nil
-        }
-        
-        try SDL_RenderFillRect(internalPointer, rectPointer).sdlThrow(type: type(of: self))
+    public func fillRect(rect: SDL_Rect? = nil) throws {
+        try withUnsafePointer(to: rect!) { ptr in try SDL_RenderFillRect(internalPointer, ptr).sdlThrow(type: type(of: self)) }
+    }
+
+    public func fillRect(x: Int, y: Int, width: Int, height: Int) throws {
+        try! fillRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
+    }
+
+    public func drawRect(rect: SDL_Rect? = nil) throws {
+        try withUnsafePointer(to: rect!) { ptr in try SDL_RenderDrawRect(internalPointer, ptr).sdlThrow(type: type(of: self)) }
+    }
+
+    public func drawRect(x: Int, y: Int, width: Int, height: Int) throws {
+        try! drawRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
+    }
+
+    /// Draw a line with the drawing color
+    public func drawLine(x1: Int, y1: Int, x2: Int, y2: Int) {
+        SDL_RenderDrawLine(internalPointer, Int32(x1), Int32(x2), Int32(y1), Int32(y2))
+    }
+
+    /// Draw a line with the drawing color
+    public func drawLine(_ x1: Int, _ x2: Int, _ y1: Int, _ y2: Int) {
+        drawLine(x1: x1, y1: y1, x2: x2, y2: y2)
     }
 }
 
