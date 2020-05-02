@@ -1,0 +1,5 @@
+module CSDL2GFX {
+    header "shim.h"
+    link "SDL2_gfx"
+    export *
+}

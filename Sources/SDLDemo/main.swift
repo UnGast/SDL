@@ -31,9 +31,9 @@ func main() throws {
     
     var isRunning = true
     
-    try SDL.initialize(subSystems: [.video])
+    try SDLSystem.initialize(subSystems: [.video])
     
-    defer { SDL.quit() }
+    defer { SDLSystem.quit() }
     
     let windowSize = (width: 600, height: 480)
     

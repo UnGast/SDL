@@ -6,6 +6,8 @@
 //
 
 import CSDL2
+import CSDL2GFX
+import CSDL2TTF
 
 /// SDL Renderer
 public final class SDLRenderer {
@@ -137,7 +139,11 @@ public final class SDLRenderer {
     }
 
     public func fillRect(x: Int, y: Int, width: Int, height: Int) throws {
-        try! fillRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
+        try fillRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
+    }
+
+    public func fillRect(x1: Int, y1: Int, x2: Int, y2: Int) throws {
+        try fillRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }
 
     public func drawRect(rect: SDL_Rect? = nil) throws {
@@ -145,7 +151,7 @@ public final class SDLRenderer {
     }
 
     public func drawRect(x: Int, y: Int, width: Int, height: Int) throws {
-        try! drawRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
+        try drawRect(rect: SDL_Rect(x: Int32(x), y: Int32(y), w: Int32(width), h: Int32(height)))
     }
 
     /// Draw a line with the drawing color
@@ -156,6 +162,22 @@ public final class SDLRenderer {
     /// Draw a line with the drawing color
     public func drawLine(_ x1: Int, _ x2: Int, _ y1: Int, _ y2: Int) {
         drawLine(x1: x1, y1: y1, x2: x2, y2: y2)
+    }
+
+    public func drawCircle(x: Int, y: Int, radius: Int) {
+        circleRGBA(internalPointer, Sint16(x), Sint16(y), Sint16(radius), Uint8(255), Uint8(255), Uint8(255), Uint8(255))
+    }
+
+    public func drawText(x: Int, y: Int, text: String, fontSize: Int, fontPath: String, color: SDL_Color) -> SDL_Rect {
+        let font = TTF_OpenFont(fontPath, Int32(fontSize))
+        let surface = TTF_RenderText_Solid(font!, text, color)
+        let texture = SDL_CreateTextureFromSurface(internalPointer, surface)
+        let destRect = SDL_Rect(x: Int32(x), y: Int32(y), w: (surface!.pointee as SDL_Surface).w, h: (surface!.pointee as SDL_Surface).h)
+        withUnsafePointer(to: destRect) { SDL_RenderCopy(internalPointer, texture, nil, $0) }
+        SDL_DestroyTexture(texture)
+        SDL_FreeSurface(surface)
+        TTF_CloseFont(font)
+        return destRect
     }
 }
 

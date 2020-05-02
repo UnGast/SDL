@@ -1,7 +1,8 @@
 import CSDL2
+import CSDL2TTF
 
 /// [Simple DirectMedia Layer](https://wiki.libsdl.org/)
-public struct SDL {
+public struct SDLSystem {
     
     /// Use this function to initialize the SDL library.
     /// You should specify the subsystems which you will be using in your application
@@ -10,6 +11,7 @@ public struct SDL {
     public static func initialize(subSystems: BitMaskOptionSet<SubSystem>) throws {
                 
         try SDL_Init(subSystems.rawValue).sdlThrow(type: type(of: self))
+        try TTF_Init()
     }
     
     /// Cleans up all initialized subsystems.
@@ -17,6 +19,7 @@ public struct SDL {
     /// You should call it upon all exit conditions.
     @inline(__always)
     public static func quit() {
+        TTF_Init()
         SDL_Quit()
     }
     
@@ -29,7 +32,7 @@ public struct SDL {
 
 // MARK: - Supporting Types
 
-public extension SDL {
+public extension SDLSystem {
     
     /// Specific SDL subsystems.
     enum SubSystem: UInt32, BitMaskOption {

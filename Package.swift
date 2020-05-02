@@ -18,13 +18,23 @@ let package = Package(
             dependencies: ["SDL"]),
         .target(
             name: "SDL",
-            dependencies: ["CSDL2"]),
+            dependencies: ["CSDL2", "CSDL2GFX", "CSDL2TTF"]),
         .systemLibrary(
             name: "CSDL2",
             pkgConfig: "sdl2",
             providers: [
                 .brew(["sdl2"]),
                 .apt(["libsdl2-dev"])
+            ]),
+        .systemLibrary(
+            name: "CSDL2GFX",
+            pkgConfig: "SDL2_gfx"),
+        .systemLibrary(
+            name: "CSDL2TTF",
+            pkgConfig: "SDL2_ttf",
+            providers: [
+                .apt(["libsdl2-ttf-dev"])
+                // TODO: does homebrew have this as well?
             ]),
         .testTarget(
             name: "SDLTests",
