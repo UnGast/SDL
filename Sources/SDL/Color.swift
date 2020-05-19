@@ -18,7 +18,6 @@ public struct SDLColor: RawRepresentable, Equatable, Hashable {
 }
 
 public extension SDLColor {
-    
     init(format: SDLPixelFormat,
          red: UInt8,
          green: UInt8,

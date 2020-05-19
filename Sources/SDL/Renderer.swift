@@ -49,6 +49,15 @@ public final class SDLRenderer {
         
          try SDL_SetRenderDrawColor(internalPointer, red, green, blue, alpha).sdlThrow(type: type(of: self))
     }
+
+    public func info() throws -> String {
+        var info = SDL_RendererInfo()
+        try SDL_GetRendererInfo(internalPointer, &info)
+        print(info)
+        print((info.flags & SDL_RENDERER_TARGETTEXTURE.rawValue) == SDL_RENDERER_TARGETTEXTURE.rawValue)
+        print(SDL_RENDERER_TARGETTEXTURE.rawValue)
+        return "wow"
+    }
     
     /// Current rendering target texture.
     public private(set) var target: SDLTexture?
@@ -164,8 +173,8 @@ public final class SDLRenderer {
         drawLine(x1: x1, y1: y1, x2: x2, y2: y2)
     }
 
-    public func drawCircle(x: Int, y: Int, radius: Int) {
-        circleRGBA(internalPointer, Sint16(x), Sint16(y), Sint16(radius), Uint8(255), Uint8(255), Uint8(255), Uint8(255))
+    public func drawCircle(x: Int, y: Int, radius: Int, color: SDL_Color) {
+        circleRGBA(internalPointer, Sint16(x), Sint16(y), Sint16(radius), color.r, color.g, color.b, color.a)
     }
 
     public func drawText(x: Int, y: Int, text: String, fontSize: Int, fontPath: String, color: SDL_Color) -> SDL_Rect {

@@ -1,0 +1,5 @@
+module CSDL2TTF {
+    header "shim.h"
+    link "SDL2_ttf"
+    export *
+}

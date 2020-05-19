@@ -70,3 +70,5 @@ fastlane/test_output
 Packages
 SDL.xcodeproj
 
+# Idea
+.idea
