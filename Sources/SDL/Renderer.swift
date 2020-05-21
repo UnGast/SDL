@@ -50,6 +50,7 @@ public final class SDLRenderer {
          try SDL_SetRenderDrawColor(internalPointer, red, green, blue, alpha).sdlThrow(type: type(of: self))
     }
 
+    // TODO: implement
     public func info() throws -> String {
         var info = SDL_RendererInfo()
         try SDL_GetRendererInfo(internalPointer, &info)
@@ -71,9 +72,18 @@ public final class SDLRenderer {
         self.target = newValue
     }
     
+    /// Set the drawing area to a specified Rectangle. Things on the outside will not be drawn.
+    public func setClipArea(_ bounds: SDL_Rect) throws {
+        try withUnsafePointer(to: bounds) { try SDL_RenderSetClipRect(internalPointer, $0).sdlThrow(type: type(of: self)) }
+    }
+
+    /// Remove clip area. Enable drawing to whole area. 
+    public func releaseClipArea() throws {
+        try SDL_RenderSetClipRect(internalPointer, nil).sdlThrow(type: type(of: self))
+    }
+
     /// The blend mode used for drawing operations (Fill and Line).
     public func drawBlendMode() throws -> BitMaskOptionSet<SDLBlendMode> {
-        
         var value = SDL_BlendMode(0)
         SDL_GetRenderDrawBlendMode(internalPointer, &value)
         return BitMaskOptionSet<SDLBlendMode>(rawValue: value.rawValue)
@@ -89,7 +99,6 @@ public final class SDLRenderer {
     
     /// Set a device independent resolution for rendering
     public func setLogicalSize(width: Int32, height: Int32) throws {
-        
         try SDL_RenderSetLogicalSize(internalPointer, width, height).sdlThrow(type: type(of: self))
     }
     
@@ -175,6 +184,10 @@ public final class SDLRenderer {
 
     public func drawCircle(x: Int, y: Int, radius: Int, color: SDL_Color) {
         circleRGBA(internalPointer, Sint16(x), Sint16(y), Sint16(radius), color.r, color.g, color.b, color.a)
+    }
+
+    public func drawEllipse(x: Int, y: Int, radiusX: Int, radiusY: Int, color: SDL_Color) {
+        aaellipseRGBA(internalPointer, Sint16(x), Sint16(y), Sint16(radiusX), Sint16(radiusY), color.r, color.g, color.b, color.a)
     }
 
     public func drawText(x: Int, y: Int, text: String, fontSize: Int, fontPath: String, color: SDL_Color) -> SDL_Rect {
