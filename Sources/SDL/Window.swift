@@ -12,7 +12,7 @@ public final class SDLWindow {
     
     // MARK: - Properties
     
-    internal let internalPointer: OpaquePointer
+    public let internalPointer: OpaquePointer
     
     // MARK: - Initialization
     
